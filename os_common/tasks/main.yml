@@ -1,0 +1,26 @@
+---
+# tasks file for os_common
+- name: Install repo manage
+  apt: name=software-properties-common state=present
+  tags:
+   - repo
+      
+- name: Add openstack repo
+  apt_repository: repo='deb http://ubuntu-cloud.archive.canonical.com/ubuntu trusty-updates/mitaka main' state=present 
+  tags:
+   - repo
+      
+- name: Install ntp service
+  apt: name=chrony state=present
+  notify:
+   - chrony restart    
+  tags:
+   - ntp
+  
+- name: hosts
+  lineinfile: dest=/etc/hosts line="{{ansible_default_ipv4.address}} controller" state=present
+  tags:
+   - hostname   
+  notify:
+   - networking   
+     

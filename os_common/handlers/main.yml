@@ -1,0 +1,7 @@
+---
+# handlers file for os_common
+- name: chrony restart
+  service: name=chrony state=restarted
+
+- name: networking
+  service: name=networking state=restarted

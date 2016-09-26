@@ -1,0 +1,12 @@
+#template controller mysql
+[mysqld]
+bind-address = {{ansible_default_ipv4.address}}
+default-storage-engine = innodb
+innodb_file_per_table
+collation-server = utf8_general_ci
+init-connect = ’SET NAMES utf8’
+character-set-server = utf8
+innodb_buffer_pool_size = 1G
+innodb_log_file_size = 256M
+innodb_log_buffer_size = 32M
+max_allowed_packet = 32M

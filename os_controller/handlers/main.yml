@@ -1,0 +1,4 @@
+---
+# handlers file for os_controller
+- name: mysqld_reload
+  service: name=mysql state=reloaded

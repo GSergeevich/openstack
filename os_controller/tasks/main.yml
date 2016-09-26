@@ -1,0 +1,39 @@
+---
+# tasks file for os_controller
+   
+    - name: Install DB software
+      apt: name={{item}} state=present update_cache=yes install_recommends=yes force=yes
+      with_items :  
+          - mariadb-server 
+          - python-pymysql
+          - rabbitmq-server
+          - keystone
+          - python-openstackclient
+          - apache2
+          - libapache2-mod-wsgi
+          - memcached
+          - python-memcache
+          - python-mysqldb
+      tags: db_packages
+           
+    - name: Create config for mysql
+      template: src=control_mysql.conf.j2 dest=/etc/mysql/conf.d/openstack.cnf owner=root group=root mode=0644 state=file
+      notify:
+        - mysqld_reload
+        
+    - name: Create rabbit user with full privileges  
+      rabbitmq_user: user=openstack
+                     password={{RABBIT_PASS}}
+                     vhost=/
+                     configure_priv=.*
+                     read_priv=.*
+                     write_priv=.*
+                     state=present
+                 
+    - name: Create DB keystone
+      mysql_db: name=keystone state=present
+      tags: db_create
+    
+    - name: Create keystone DB user
+      mysql_user: name=keystone password={{KEYSTONE_DBPASS}} priv=keystone.*:ALL state=present
+      tags: dbuser_create           

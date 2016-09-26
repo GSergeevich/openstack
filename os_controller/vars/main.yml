@@ -1,0 +1,27 @@
+---
+# vars file for os_controller
+#Password name 	Description
+#Database password (no variable used) 	Root password for the database
+#ADMIN_PASS 	Password of user admin
+#CEILOMETER_DBPASS 	Database password for the Telemetry service
+#CEILOMETER_PASS 	Password of Telemetry service user ceilometer
+#CINDER_DBPASS 	Database password for the Block Storage service
+#CINDER_PASS 	Password of Block Storage service user cinder
+#DASH_DBPASS 	Database password for the dashboard
+#DEMO_PASS 	Password of user demo
+#GLANCE_DBPASS 	Database password for Image service
+#GLANCE_PASS 	Password of Image service user glance
+#HEAT_DBPASS 	Database password for the Orchestration service
+#HEAT_DOMAIN_PASS 	Password of Orchestration domain
+#HEAT_PASS 	Password of Orchestration service user heat
+#KEYSTONE_DBPASS 	Database password of Identity service
+#NEUTRON_DBPASS 	Database password for the Networking service
+#NEUTRON_PASS 	Password of Networking service user neutron
+#NOVA_DBPASS 	Database password for Compute service
+#NOVA_PASS 	Password of Compute service user nova
+#RABBIT_PASS 	Password of user guest of RabbitMQ
+#SWIFT_PASS 	Password of Object Storage service user swift
+KEYSTONE_DBPASS: keystone_dbpass
+NOVA_DBPASS: novadbpass
+NOVA_PASS: novapass
+RABBIT_PASS: rabbitpass
