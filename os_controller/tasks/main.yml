@@ -56,4 +56,14 @@
       raw: su -s /bin/sh -c "keystone-manage db_sync" keystone
       tags: keystone_db_populate
   
+       
+    - name: Apache2 servername
+      lineinfile: dest=/etc/apache2/apache2.conf line="ServerName controller" state=present create=yes
+      tags: apache2_servername
+      
+    - name: Apache conf for keystone
+      copy: src=wsgi-keystone.conf dest=/etc/apache2/sites-available/wsgi-keystone.conf 
+      tags: apache2_config
+      notify:
+        - sites-enabled
               

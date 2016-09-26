@@ -8,3 +8,6 @@
 
 - name: mysqld_reload
   service: name=mysql state=restarted
+  
+- name: sites-enabled
+  file: src=/etc/apache2/sites-available/wsgi-keystone.conf dest=/etc/apache2/sites-enabled state=link
