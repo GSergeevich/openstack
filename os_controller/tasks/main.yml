@@ -1,7 +1,9 @@
 ---
 # tasks file for os_controller
-   
-    - name: Install DB software
+    - name: hostame
+      hostname: name=controller
+
+    - name: Install controller's software
       apt: name={{item}} state=present update_cache=yes install_recommends=yes force=yes
       with_items :  
           - mariadb-server 
@@ -14,10 +16,11 @@
           - memcached
           - python-memcache
           - python-mysqldb
-      tags: db_packages
+      tags: controller_packages
            
     - name: Create config for mysql
-      template: src=control_mysql.conf.j2 dest=/etc/mysql/conf.d/openstack.cnf owner=root group=root mode=0644 state=file
+      template: src=control_mysql.conf.j2 dest=/etc/mysql/conf.d/openstack.cnf owner=root group=root mode=0644
+      tags: mysql_config
       notify:
         - mysqld_reload
         
@@ -29,11 +32,28 @@
                      read_priv=.*
                      write_priv=.*
                      state=present
-                 
+    
+    - name: Create config for keystone
+      template: src=keystone.conf.j2 dest=/etc/keystone/keystone.conf owner=root group=root mode=0644
+      tags: keystone_config
+                     
     - name: Create DB keystone
       mysql_db: name=keystone state=present
       tags: db_create
     
     - name: Create keystone DB user
-      mysql_user: name=keystone password={{KEYSTONE_DBPASS}} priv=keystone.*:ALL state=present
-      tags: dbuser_create           
+      mysql_user: name=keystone password={{KEYSTONE_DBPASS}} priv=keystone.*:ALL state=present check_implicit_admin=yes  host={{item}}
+      with_items:
+        - '%'
+        - localhost
+      tags: dbuser_create   
+      
+    - name: Disable autostart of keystone service in sysinit
+      lineinfile: dest=/etc/init/keystone.override line="manual" state=present create=yes
+      tags: keystone_manual_start
+    
+    - name: Populate keystone DB
+      raw: su -s /bin/sh -c "keystone-manage db_sync" keystone
+      tags: keystone_db_populate
+  
+              

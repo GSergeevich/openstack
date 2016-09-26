@@ -5,3 +5,6 @@
 
 - name: networking
   service: name=networking state=restarted
+
+- name: mysqld_reload
+  service: name=mysql state=restarted

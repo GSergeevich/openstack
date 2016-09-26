@@ -1,1 +1,14 @@
+[DEFAULT]
+admin_token = TOKEN_ID
 
+[database]
+connection = mysql://keystone:{{KEYSTONE_DBPASS}}@{{DB_ADDRESS}}/keystone
+
+[token]
+provider = keystone.token.providers.uuid.Provider
+driver = keystone.token.persistence.backends.memcache.Token
+
+[memcache]
+servers = controller:11211
+
+verbose = TRUE
