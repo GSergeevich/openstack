@@ -18,11 +18,27 @@
           - python-mysqldb
       tags: controller_packages
            
+    - name: Stop mysql service  
+      service: name=mysql state=stopped
+   
     - name: Create config for mysql
       template: src=control_mysql.conf.j2 dest=/etc/mysql/conf.d/openstack.cnf owner=root group=root mode=0644
       tags: mysql_config
-      notify:
-        - mysqld_reload
+    
+    - name: Search old InnoDB log files
+      find: paths="/var/lib/mysql/" patterns="ib_logfile*"
+      register: logs
+      tags: search_log
+    
+    - name: Remove old InnoDB log files
+      file: path=/var/lib/mysql/{{ item }} state=absent
+      with_items: 
+        - ib_logfile0
+        - ib_logfile1
+      tags: rem_log
+    
+    - name: Start mysql service  
+      service: name=mysql state=started
         
     - name: Create rabbit user with full privileges  
       rabbitmq_user: user=openstack
@@ -33,10 +49,18 @@
                      write_priv=.*
                      state=present
     
+    - name: Configure memcached listen iface
+      template: src=memcache.conf.j2 dest=/etc/memcached.conf owner=root group=root mode=0644
+      tags: memcached_config
+    
+    - name: Restart memcached service  
+      service: name=memcached state=restarted  
+      tags: memcached_restart
+    
     - name: Create config for keystone
       template: src=keystone.conf.j2 dest=/etc/keystone/keystone.conf owner=root group=root mode=0644
       tags: keystone_config
-                     
+
     - name: Create DB keystone
       mysql_db: name=keystone state=present
       tags: db_create
@@ -66,4 +90,3 @@
       tags: apache2_config
       notify:
         - sites-enabled
-              

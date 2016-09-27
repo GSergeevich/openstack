@@ -23,8 +23,16 @@
 #SWIFT_PASS 	Password of Object Storage service user swift
 #
 #DB_ADDRESS     DP server address
+#OS_URL         OS url
 KEYSTONE_DBPASS: keystone_dbpass
 NOVA_DBPASS: novadbpass
 NOVA_PASS: novapass
 RABBIT_PASS: rabbitpass
 DB_ADDRESS: controller
+ADMIN_TOKEN: 16bcf299442b12e924c4
+OS_URL: http://controller:35357/v3
+OS_IDENTITY_API_VERSION: '3'
+token: "{{ ADMIN_TOKEN }}"
+url: "{{ OS_URL }}"
+version: "{{ OS_IDENTITY_API_VERSION }}"
+

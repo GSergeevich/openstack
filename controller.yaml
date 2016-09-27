@@ -5,3 +5,4 @@
   roles : 
   - os_common
   - os_controller
+  - os_keystone_manipulate
