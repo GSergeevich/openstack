@@ -6,3 +6,7 @@
   - os_common
   - os_controller
   - os_keystone_manipulate
+  environment:
+       - OS_TOKEN: "{{ ADMIN_TOKEN }}" 
+         OS_URL: "{{ OS_URL }}"
+         OS_IDENTITY_API_VERSION: "{{ OS_IDENTITY_API_VERSION }}"

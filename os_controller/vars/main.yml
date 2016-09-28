@@ -35,4 +35,5 @@ OS_IDENTITY_API_VERSION: '3'
 token: "{{ ADMIN_TOKEN }}"
 url: "{{ OS_URL }}"
 version: "{{ OS_IDENTITY_API_VERSION }}"
-
+admin_password: PxBdfW
+demo_password: 8kHrul
