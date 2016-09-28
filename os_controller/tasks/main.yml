@@ -16,6 +16,7 @@
           - memcached
           - python-memcache
           - python-mysqldb
+          - python-shade
       tags: controller_packages
            
     - name: Stop mysql service  

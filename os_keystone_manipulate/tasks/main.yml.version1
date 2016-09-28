@@ -52,3 +52,21 @@
          OS_URL: "{{ OS_URL }}"
          OS_IDENTITY_API_VERSION: "{{ OS_IDENTITY_API_VERSION }}"
       tags: project_create
+      
+      
+      
+      
+      
+      export OS_PROJECT_DOMAIN_ID=default
+export OS_USER_DOMAIN_ID=default
+export OS_PROJECT_NAME=admin
+export OS_TENANT_NAME=admin
+export OS_USERNAME=admin
+export OS_PASSWORD=P@ssCenter
+export OS_AUTH_URL=http://controller0:35357/v3
+export OS_IMAGE_API_VERSION=2
+export OS_VOLUME_API_VERSION=2
+
+
+
+???????

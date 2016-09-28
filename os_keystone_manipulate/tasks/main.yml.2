@@ -1,0 +1,29 @@
+---
+# tasks file for os_keystone_manipulate
+    - name: keystone service start
+      service: name=keystone state=started 
+          
+    - name: Keystone service create with cli
+      command: {{item}}
+      with_items:
+        - "{{ openstack service create --name keystone --description OpenStack Identity identity }}"
+        - "{{ openstack endpoint create --region RegionOne identity public http://controller:5000/v3 }}"
+        - "{{ openstack endpoint create --region RegionOne identity internal http://controller:5000/v3 }}"
+        - "{{ openstack endpoint create --region RegionOne identity admin http://controller:35357/v3 }}"           
+        - "{{ openstack domain create --description Default Domain default }}"
+        - "{{ openstack project create --domain default --description Admin Project admin }}"
+        - "{{ openstack user create --domain default --password-prompt admin }}"
+        - "{{ openstack role create admin }}"
+        - "{{ openstack role add --project admin --user admin admin }}"
+        - "{{ openstack project create --domain default --description Service Project service }}"
+        - "{{ openstack role create user}}"
+      environment:
+       - OS_TOKEN: "{{ ADMIN_TOKEN }}" 
+         OS_URL: "{{ OS_URL }}"
+         OS_IDENTITY_API_VERSION: "{{ OS_IDENTITY_API_VERSION }}"
+      #register: command_result
+      #TODO: create service only if not exist
+      #failed_when: "'two projects acting as domains with the same name' not in command_result.stderr and command_result.stderr != ''"
+      #with_items: "{{ keystone_domains }}" 
+      tags: key_full
+      
