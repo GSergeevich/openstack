@@ -29,7 +29,7 @@ NOVA_DBPASS: novadbpass
 NOVA_PASS: novapass
 RABBIT_PASS: rabbitpass
 DB_ADDRESS: controller
-ADMIN_TOKEN: 16bcf299442b12e924c4
+ADMIN_TOKEN: f586e04594c4ffe6a6a4
 OS_URL: http://controller:35357/v3
 OS_IDENTITY_API_VERSION: '3'
 token: "{{ ADMIN_TOKEN }}"
@@ -37,3 +37,6 @@ url: "{{ OS_URL }}"
 version: "{{ OS_IDENTITY_API_VERSION }}"
 admin_password: PxBdfW
 demo_password: 8kHrul
+GLANCE_DBPASS: glance_dbpass
+glance_password: 8kH4$3
+#: B%fWty

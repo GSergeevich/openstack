@@ -1,0 +1,73 @@
+---
+# tasks file for os_glance
+    - name:         Create DB glance
+      mysql_db: name=glance state=present
+      tags: db_create
+    
+    - name:         Create glance DB user
+      mysql_user: name=glance password={{GLANCE_DBPASS}} priv=glance.*:ALL state=present check_implicit_admin=yes  host={{item}}
+      with_items:
+        - '%'
+        - localhost
+      tags: dbuser_create
+    
+    - name:         Get list of project service users.
+      register:     service_users
+      changed_when: no
+      command:      openstack user list -f value -c Name --project service
+    
+    
+    - name:         Create glance user.
+      command:      'openstack user create --domain default --password {{ item.password }} {{ item.name }}'
+      when:         '"{{ item.name }}" not in service_users.stdout'
+      with_items:
+    
+        - name: glance
+          password: '{{ glance_password }}'
+      
+    - name:         Assign role admin to glance in service project.
+      changed_when: no
+      command:      'openstack role add --project {{ item.project }} --user {{ item.user }} {{ item.role }}'
+      with_items:
+        - project: service
+          user:    glance
+          role:    admin
+    
+    - name:         Get list of services.
+      changed_when: no
+      command:      openstack service list -f value -c Type
+      register:     openstack_services
+      
+    - name:         Glance service create with cli
+      command:      openstack service create --name glance --description "OpenStack image" image
+      when:         '"image" not in openstack_services.stdout'
+      tags:         image_service
+    
+    - name:         Glance endpoint create
+      command:      openstack endpoint create --region RegionOne image {{ item }} {{ OS_URL }}
+      with_items: 
+        - public
+        - admin
+        - internal
+      tags:         endpoint_create
+    
+    - name:         Install glance software
+      apt: name=glance state=present update_cache=yes install_recommends=yes force=yes
+      tags:         glance_package
+    
+    - name:         Config glance-api
+      template: src=glance-api.conf.j2 dest=/etc/glance/glance-api.conf owner=root group=root mode=0644       
+    
+    - name:         Config glance-registry
+      template: src=glance-registry.conf.j2 dest=/etc/glance/glance-registry.conf owner=root group=root mode=0644
+      
+    - name: Populate glance DB
+      raw: su -s /bin/sh -c "glance-manage db_sync" glance
+      tags: glance_db_populate
+      
+    - name: Restart glance services 
+      service: name="{{ item }}" state=restarted
+      with_items:
+        - glance-registry
+        - glance-api 
+      tags: glance_restart            

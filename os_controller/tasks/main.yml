@@ -80,7 +80,10 @@
       raw: su -s /bin/sh -c "keystone-manage db_sync" keystone
       tags: keystone_db_populate
   
-       
+    - name: Enable fernet keys
+      raw:  keystone-manage fernet_setup --keystone-user keystone --keystone-group keystone
+      tags: fernet
+        
     - name: Apache2 servername
       lineinfile: dest=/etc/apache2/apache2.conf line="ServerName controller" state=present create=yes
       tags: apache2_servername
