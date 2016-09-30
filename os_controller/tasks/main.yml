@@ -57,6 +57,12 @@
       service: name=memcached state=restarted  
       tags: memcached_restart
     
+    - name: Catch keystone status
+      register: keystone_status
+      command: service keystone status 
+    
+    - debug: msg="Keystone service are {{keystone_status}}"
+    
     - name: Create config for keystone
       template: src=keystone.conf.j2 dest=/etc/keystone/keystone.conf owner=root group=root mode=0644
       tags: keystone_config
