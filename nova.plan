@@ -1,0 +1,28 @@
+NOVA PLAN
+---
+
+DB nova,nova-api
+DB user nova wth all priveleges
+
+
+create nova user in openstack
+
+add admin rolke to nova user in @service@ project
+
+create nova service
+
+endpoints (pia),compute
+
+apt-get install nova-api nova-conductor nova-consoleauth \
+  nova-novncproxy nova-scheduler
+
+Edit the /etc/nova/nova.conf
+
+Populate the Compute databases:(WTF is "compute" DB)
+
+Restart the Compute services:
+# service nova-api restart
+# service nova-consoleauth restart
+# service nova-scheduler restart
+# service nova-conductor restart
+# service nova-novncproxy restart

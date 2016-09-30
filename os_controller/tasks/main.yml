@@ -99,3 +99,6 @@
       tags: apache2_config
       notify:
         - sites-enabled
+    
+    - name: Admin rc script
+      template: src=openrc.j2 dest=/root/openrc owner=root group=root mode=0644

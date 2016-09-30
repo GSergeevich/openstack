@@ -1,15 +1,12 @@
 ---
 # tasks file for os_keystone_manipulate
-    - name:         keystone service start
-      service:      name=keystone state=restarted 
-          
     - name:         Get list of services.
       changed_when: no
       command:      openstack service list -f value -c Type
       register:     openstack_services
       tags:         service_list
        
-    - debug:        msg="TOKEN IS {{ ADMIN_TOKEN }}"
+    - debug:        msg="TOKEN IS {{ ADMIN_TOKEN }} and list is {{openstack_services.stdout}}"
       tags:         debug
 
     - name:         Keystone service create with cli
@@ -17,15 +14,11 @@
       when:         '"identity" not in openstack_services.stdout'
       tags:         key_service
       
-    #- name:         Keystone service del with cli
-    #  command:      openstack service delete keystone
-      #when:         '"identity" not in openstack_services.stdout'
-    #  tags:         key_del  
-    
     - name:         Get list of endpoints
       changed_when: no
       command:      openstack endpoint list -f value -c "Service Name"
       register:     openstack_endpoints
+      tags:         get_list
       
     - name:         Endpoint create
       command:      openstack endpoint create --region RegionOne identity {{ item.name }} http://controller:{{ item.port }}/v3

@@ -39,4 +39,5 @@ admin_password: PxBdfW
 demo_password: 8kHrul
 GLANCE_DBPASS: glance_dbpass
 glance_password: 8kH4$3
+#glance_url: http://controller:9292
 #: B%fWty

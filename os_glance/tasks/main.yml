@@ -43,12 +43,25 @@
       when:         '"image" not in openstack_services.stdout'
       tags:         image_service
     
+    - name:         Get list of glance endpoints
+      changed_when: no
+      command:      openstack endpoint list -f value -c "Interface" --service image 
+      register:     os_glance_endpoints
+      tags:         get_list
+      
     - name:         Glance endpoint create
-      command:      openstack endpoint create --region RegionOne image {{ item }} {{ OS_URL }}
+      command:      openstack endpoint create --region RegionOne image {{ item }} http://controller:{{ item.port }}
       with_items: 
-        - public
-        - admin
-        - internal
+        - name: public
+          port: 9292 
+           
+        - name: admin
+          port: 9292
+          
+        - name: internal
+          port: 9292
+          
+      when:         '"{{item.name}}" not in os_glance_endpoints.stdout'
       tags:         endpoint_create
     
     - name:         Install glance software
