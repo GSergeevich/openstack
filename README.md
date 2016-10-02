@@ -1,4 +1,4 @@
 # openstack
-This Ansible-playbook are create openstack Mitaka cloud.
-ubuntu 14.04 Thrusty.
+This Ansible-playbook create openstack Mitaka.
+Tested on ubuntu 14.04 Thrusty.
 
